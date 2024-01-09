@@ -5,13 +5,12 @@ on:
     branches:
       - dev
       - main
+  workflow_dispatch:
 
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
-
-    env:
-        DATABASE_PASSWORD: ${{ vars.DATABASE_PASSWORD_DEV }}
+    environment: dev
 
     steps:
       - name: Checkout code
