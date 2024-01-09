@@ -11,7 +11,7 @@ jobs:
   deploy-dev:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.event_name == 'push' && github.event.ref_type == 'branch' && contains(github.event.ref, 'dev') && 'dev' || 'prd' }}
+      name: ${{ github.ref_name }}
     steps:
       - name: Extract branch name
         shell: bash
