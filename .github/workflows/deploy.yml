@@ -11,11 +11,10 @@ jobs:
   get-current-branch:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Extract branch name
-        shell: bash
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        id: extract_branch
+    outputs:
+      id: extract_branch
+      set-env:
+        branch: ${{ steps.extract_branch.outputs.branch }}
 
   deploy-dev:
     runs-on: ubuntu-latest
@@ -28,3 +27,4 @@ jobs:
       - name: Print Database Password
         run: |
           echo ${{ vars.DATABASE_PASSWORD }} on ${{ steps.extract_branch.outputs.branch }}
+        id: extract_branch
