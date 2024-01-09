@@ -3,18 +3,18 @@ name: "Main"
 on:
   push:
     branches:
-      - master
-      - production
+      - main
+      - dev
   pull_request:
     branches:
-      - master
-      - production
+      - main
+      - dev
 
 jobs:
   init:
     runs-on: ubuntu-latest
     outputs:
-      gcloud_project: ${{ steps.setvars.outputs.gcloud_project }}
+      DATABASE_PASSWORD_DEV: ${{ steps.setvars.outputs.DATABASE_PASSWORD_DEV }}
       phase: ${{ steps.setvars.outputs.phase }}
 
     steps:
@@ -26,14 +26,14 @@ jobs:
       - name: Set variables
         id: setvars
         run: |
-          if [[ "${{github.base_ref}}" == "master" || "${{github.ref}}" == "refs/heads/master" ]]; then
-            echo "::set-output name=gcloud_project::my-project-dev"
+          if [[ "${{github.base_ref}}" == "main" || "${{github.ref}}" == "refs/heads/main" ]]; then
+            echo "::set-output name=DATABASE_PASSWORD_DEV::DATABASE_PASSWORD_DEV"
             echo "::set-output name=phase::staging"
           fi
 
-          if [[ "${{github.base_ref}}" == "production" || "${{github.ref}}" == "refs/heads/production" ]]; then
-            echo "::set-output name=gcloud_project::my-project-prd"
-            echo "::set-output name=phase::production"
+          if [[ "${{github.base_ref}}" == "dev" || "${{github.ref}}" == "refs/heads/dev" ]]; then
+            echo "::set-output name=DATABASE_PASSWORD_DEV::my-project-prd"
+            echo "::set-output name=phase::dev"
           fi
 
   print:
@@ -41,4 +41,4 @@ jobs:
     needs: init
     steps:
       - name: Print
-        run: echo "gcloud_project=${{needs.init.outputs.gcloud_project}}"
+        run: echo "DATABASE_PASSWORD_DEV=${{needs.init.outputs.DATABASE_PASSWORD_DEV}}"
