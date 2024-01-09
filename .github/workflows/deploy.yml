@@ -18,4 +18,4 @@ jobs:
 
       - name: Print Database Password
         run: |
-          echo ${{ env.DATABASE_PASSWORD }}
+          echo ${{ vars.DATABASE_PASSWORD }}
