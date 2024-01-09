@@ -22,6 +22,7 @@ jobs:
         id: extract_branch
 
   deploy-dev:
+    needs: get-current-branch
     runs-on: ubuntu-latest
     environment: dev
 
@@ -31,4 +32,4 @@ jobs:
 
       - name: Print Database Password
         run: |
-          echo ${{ vars.DATABASE_PASSWORD }} on ${{ needs.get-current-branch.outputs.branch }}
+          echo ${{ secrets.DATABASE_PASSWORD_DEV }} on ${{ needs.get-current-branch.outputs.branch }}
