@@ -7,8 +7,11 @@ on:
       - main
 
 jobs:
-  print-password:
+  deploy-dev:
     runs-on: ubuntu-latest
+
+    env:
+        DATABASE_PASSWORD: $DATABASE_PASSWORD_DEV
 
     steps:
       - name: Checkout code
@@ -16,10 +19,4 @@ jobs:
 
       - name: Print Database Password
         run: |
-          if [ "$GITHUB_REF" == "refs/heads/dev" ]; then
-            echo "Database Password (dev): $DATABASE_PASSWORD_DEV"
-          elif [ "$GITHUB_REF" == "refs/heads/main" ]; then
-            echo "Database Password (main): ${{env.DATABASE_PASSWORD_PRD}}"
-          else
-            echo "No matching branch found for printing database password. Exit"
-          fi
+          echo ${{ env.DATABASE_PASSWORD }}
