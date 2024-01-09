@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-        DATABASE_PASSWORD: $DATABASE_PASSWORD_DEV
+        DATABASE_PASSWORD: ${{ vars.DATABASE_PASSWORD_DEV }}
 
     steps:
       - name: Checkout code
