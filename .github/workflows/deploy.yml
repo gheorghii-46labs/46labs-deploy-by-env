@@ -1,44 +1,25 @@
-name: "Main"
+name: Print Database Password
 
 on:
   push:
     branches:
-      - main
       - dev
-  pull_request:
-    branches:
       - main
-      - dev
 
 jobs:
-  init:
+  print-password:
     runs-on: ubuntu-latest
-    outputs:
-      DATABASE_PASSWORD_DEV: ${{ steps.setvars.outputs.DATABASE_PASSWORD_DEV }}
-      phase: ${{ steps.setvars.outputs.phase }}
 
     steps:
-      - name: Cancel previous workflow
-        uses: styfle/cancel-workflow-action@0.4.0
-        with:
-          access_token: ${{ github.token }}
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Set variables
-        id: setvars
+      - name: Print Database Password
         run: |
-          if [[ "${{github.base_ref}}" == "main" || "${{github.ref}}" == "refs/heads/main" ]]; then
-            echo "::set-output name=DATABASE_PASSWORD_DEV::DATABASE_PASSWORD_DEV"
-            echo "::set-output name=phase::staging"
+          if [ "$GITHUB_REF" == "refs/heads/dev" ]; then
+            echo "Database Password (dev): $DATABASE_PASSWORD_DEV"
+          elif [ "$GITHUB_REF" == "refs/heads/main" ]; then
+            echo "Database Password (main): $DATABASE_PASSWORD_PRD"
+          else
+            echo "No matching branch found for printing database password."
           fi
-
-          if [[ "${{github.base_ref}}" == "dev" || "${{github.ref}}" == "refs/heads/dev" ]]; then
-            echo "::set-output name=DATABASE_PASSWORD_DEV::my-project-prd"
-            echo "::set-output name=phase::dev"
-          fi
-
-  print:
-    runs-on: ubuntu-latest
-    needs: init
-    steps:
-      - name: Print
-        run: echo "DATABASE_PASSWORD_DEV=${{needs.init.outputs.DATABASE_PASSWORD_DEV}}"
