@@ -19,7 +19,7 @@ jobs:
           if [ "$GITHUB_REF" == "refs/heads/dev" ]; then
             echo "Database Password (dev): $DATABASE_PASSWORD_DEV"
           elif [ "$GITHUB_REF" == "refs/heads/main" ]; then
-            echo "Database Password (main): $DATABASE_PASSWORD_PRD"
+            echo "Database Password (main): ${{env.DATABASE_PASSWORD_PRD}}"
           else
             echo "No matching branch found for printing database password. Exit"
           fi
